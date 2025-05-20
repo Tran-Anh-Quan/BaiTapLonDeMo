@@ -29,35 +29,7 @@ namespace BaiTapLonDeMo.ViewModels
             TaiKhoanTable.Columns.Add("MaNhanVien", typeof(string));
         }
 
-        public void LoadTaiKhoan()
-        {
-            TaiKhoanTable.Clear();
-
-            try
-            {
-                using (SqlConnection conn = ConnectSQL.ConnectDB())
-                {
-                    conn.Open();
-                    string query = "SELECT * FROM TaiKhoan";
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            TaiKhoanTable.Rows.Add(
-                                reader["TenDangNhap"].ToString(),
-                                reader["MatKhau"].ToString(),
-                                reader["MaNhanVien"].ToString()
-                            );
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi khi truy vấn dữ liệu tài khoản: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+        
 
         public bool DangNhapTaiKhoan(string tenDangNhap, string matKhau)
         {
@@ -82,17 +54,54 @@ namespace BaiTapLonDeMo.ViewModels
                 return false;
             }
         }
-
-        public DataRow LayTaiKhoanTheoMaNhanVien(string maNhanVien)
+        public DataTable LayTatCatkNhanVien()
         {
-            foreach (DataRow row in TaiKhoanTable.Rows)
+            DataTable dt = new DataTable();
+
+            using (SqlConnection conn = ConnectSQL.ConnectDB())
             {
-                if (row["MaNhanVien"].ToString() == maNhanVien)
+                try
                 {
-                    return row;
+                    conn.Open();
+                    string sql = "SELECT * FROM TaiKhoan";
+                    SqlDataAdapter adapter = new SqlDataAdapter(sql, conn);
+                    adapter.Fill(dt);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi tải danh sách nhân viên: " + ex.Message);
                 }
             }
-            return null;
+
+            return dt;
         }
+        public DataRow LayTaiKhoanTheoMa(string maNhanVien)
+        {
+            DataTable dt = new DataTable();
+
+            using (SqlConnection conn = ConnectSQL.ConnectDB())
+            {
+                try
+                {
+                    conn.Open();
+                    string sql = "SELECT * FROM TaiKhoan WHERE MaNhanVien = @MaNhanVien";
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    cmd.Parameters.AddWithValue("@MaNhanVien", maNhanVien);
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(dt);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi tải Tài Khoản: " + ex.Message);
+                }
+            }
+
+            if (dt.Rows.Count > 0)
+                return dt.Rows[0];
+            else
+                return null;
+        }
+
     }
 }

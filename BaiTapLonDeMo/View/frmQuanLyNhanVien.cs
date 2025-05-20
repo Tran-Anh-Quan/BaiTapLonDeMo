@@ -40,7 +40,7 @@ namespace BaiTapLonDeMo.View
                 txtTimKiem.ForeColor = Color.Black;
             }
         }
-
+        
         private void txtTimKiem_Leave(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtTimKiem.Text))
@@ -65,6 +65,9 @@ namespace BaiTapLonDeMo.View
         }
         private void frmQuanLyNhanVien_Load(object sender, EventArgs e)
         {
+            dgvNhanVien.UserDeletingRow += dgvNhanVien_UserDeletingRow;
+            dgvNhanVien.AllowUserToDeleteRows = true;
+
             LoadNhanVien();
         }
         private void button1_Click(object sender, EventArgs e)
@@ -75,7 +78,7 @@ namespace BaiTapLonDeMo.View
             {
                 case "Lương tăng dần":
                     dv.Sort = "Luong ASC";
-                    dv.RowFilter = "";  // Không lọc gì thêm
+                    dv.RowFilter = ""; 
                     break;
                 case "Lương giảm dần":
                     dv.Sort = "Luong DESC";
@@ -95,8 +98,6 @@ namespace BaiTapLonDeMo.View
                     break;
             }
             dgvNhanVien.DataSource = dv;
-
-
 
         }
 
@@ -194,6 +195,15 @@ namespace BaiTapLonDeMo.View
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi khi ghi dữ liệu: " + ex.Message);
+            }
+        }
+
+        private void dgvNhanVien_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Bạn có chắc muốn xóa dòng này?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (result == DialogResult.No)
+            {
+                e.Cancel = true;
             }
         }
     }
