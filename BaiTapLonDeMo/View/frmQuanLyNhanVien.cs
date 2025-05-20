@@ -65,9 +65,8 @@ namespace BaiTapLonDeMo.View
         }
         private void frmQuanLyNhanVien_Load(object sender, EventArgs e)
         {
-            dgvNhanVien.UserDeletingRow += dgvNhanVien_UserDeletingRow;
             dgvNhanVien.AllowUserToDeleteRows = true;
-
+            dgvNhanVien.UserDeletedRow += dgvNhanVien_UserDeletedRow;
             LoadNhanVien();
         }
         private void button1_Click(object sender, EventArgs e)
@@ -198,12 +197,60 @@ namespace BaiTapLonDeMo.View
             }
         }
 
-        private void dgvNhanVien_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        //private void dgvNhanVien_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        //{
+        //    DialogResult result = MessageBox.Show("Bạn có chắc muốn xóa dòng này?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+        //    if (result == DialogResult.No)
+        //    {
+        //        e.Cancel = true;
+        //    }
+        //}
+
+        private void btnXoa_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Bạn có chắc muốn xóa dòng này?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (result == DialogResult.No)
+            if (dgvNhanVien.SelectedRows.Count == 0)
             {
-                e.Cancel = true;
+                MessageBox.Show("Vui lòng chọn ít nhất một dòng để xóa.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            DialogResult result = MessageBox.Show("Bạn có chắc muốn xóa các dòng đã chọn?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result != DialogResult.Yes)
+                return;
+
+            foreach (DataGridViewRow row in dgvNhanVien.SelectedRows)
+            {
+                if (!row.IsNewRow)
+                {
+                    DataRowView drv = row.DataBoundItem as DataRowView;
+                    if (drv != null)
+                    {
+                        drv.Row.Delete(); // đánh dấu là đã xóa
+                    }
+                }
+            }
+
+            try
+            {
+                adapter.Update(nhanVienTable); // đồng bộ với database
+                MessageBox.Show("Xóa thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi xóa dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void dgvNhanVien_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            try
+            {
+                adapter.Update(nhanVienTable);
+                MessageBox.Show("Xóa và cập nhật thành công!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi cập nhật sau khi xóa: " + ex.Message);
             }
         }
     }

@@ -32,7 +32,6 @@
             this.label7 = new System.Windows.Forms.Label();
             this.txtTimKiem = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.button3 = new System.Windows.Forms.Button();
             this.btnXoa = new System.Windows.Forms.Button();
             this.btnTimKiem = new System.Windows.Forms.Button();
             this.btnThoat = new System.Windows.Forms.Button();
@@ -74,7 +73,6 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.button3);
             this.groupBox3.Controls.Add(this.btnXoa);
             this.groupBox3.Controls.Add(this.btnTimKiem);
             this.groupBox3.Controls.Add(this.btnThoat);
@@ -93,23 +91,15 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Chức năng";
             // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(325, 30);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 33;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
             // btnXoa
             // 
-            this.btnXoa.Location = new System.Drawing.Point(308, 83);
+            this.btnXoa.Location = new System.Drawing.Point(173, 84);
             this.btnXoa.Name = "btnXoa";
-            this.btnXoa.Size = new System.Drawing.Size(75, 32);
+            this.btnXoa.Size = new System.Drawing.Size(103, 32);
             this.btnXoa.TabIndex = 32;
-            this.btnXoa.Text = "button2";
+            this.btnXoa.Text = "Xóa";
             this.btnXoa.UseVisualStyleBackColor = true;
+            this.btnXoa.Click += new System.EventHandler(this.btnXoa_Click);
             // 
             // btnTimKiem
             // 
@@ -126,7 +116,7 @@
             // 
             // btnThoat
             // 
-            this.btnThoat.Location = new System.Drawing.Point(170, 83);
+            this.btnThoat.Location = new System.Drawing.Point(492, 83);
             this.btnThoat.Name = "btnThoat";
             this.btnThoat.Size = new System.Drawing.Size(106, 33);
             this.btnThoat.TabIndex = 30;
@@ -202,7 +192,8 @@
             this.dgvNhanVien.TabIndex = 0;
             this.dgvNhanVien.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvNhanVien_CellContentClick);
             this.dgvNhanVien.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvNhanVien_CellEndEdit);
-            this.dgvNhanVien.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dgvNhanVien_UserDeletingRow);
+            this.dgvNhanVien.UserDeletedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dgvNhanVien_UserDeletedRow);
+            //this.dgvNhanVien.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dgvNhanVien_UserDeletingRow);
             // 
             // statusStrip1
             // 
@@ -259,7 +250,6 @@
         private System.Windows.Forms.Button btnTimKiem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel stsThongBaoNhanVien;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button btnXoa;
     }
 }

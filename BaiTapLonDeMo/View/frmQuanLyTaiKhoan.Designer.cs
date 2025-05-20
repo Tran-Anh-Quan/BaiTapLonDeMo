@@ -138,16 +138,18 @@
             // dgvTaiKhoan
             // 
             this.dgvTaiKhoan.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvTaiKhoan.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.dgvTaiKhoan.Location = new System.Drawing.Point(21, 17);
+            this.dgvTaiKhoan.Location = new System.Drawing.Point(21, 16);
             this.dgvTaiKhoan.Margin = new System.Windows.Forms.Padding(4);
             this.dgvTaiKhoan.Name = "dgvTaiKhoan";
             this.dgvTaiKhoan.RowHeadersWidth = 51;
             this.dgvTaiKhoan.RowTemplate.Height = 29;
-            this.dgvTaiKhoan.Size = new System.Drawing.Size(771, 278);
+            this.dgvTaiKhoan.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvTaiKhoan.Size = new System.Drawing.Size(771, 275);
             this.dgvTaiKhoan.TabIndex = 0;
             this.dgvTaiKhoan.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTaiKhoan_CellContentClick);
-            this.dgvTaiKhoan.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTaiKhoan_CellEndEdit);
+            this.dgvTaiKhoan.RowValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTaiKhoan_RowValidated);
+            this.dgvTaiKhoan.UserDeletedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dgvTaiKhoan_UserDeletedRow);
+            this.dgvTaiKhoan.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dgvTaiKhoan_UserDeletingRow);
             // 
             // statusStrip1
             // 
@@ -156,7 +158,7 @@
             this.stsThongBaoNhanVien});
             this.statusStrip1.Location = new System.Drawing.Point(0, 525);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(834, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(832, 22);
             this.statusStrip1.TabIndex = 32;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -169,13 +171,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(834, 547);
+            this.ClientSize = new System.Drawing.Size(832, 547);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.pnlGrid);
             this.Controls.Add(this.statusStrip1);
             this.Name = "frmQuanLyTaiKhoan";
             this.Text = "frmQuanLyTaiKhoan";
+            this.Load += new System.EventHandler(this.frmQuanLyTaiKhoan_Load);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.pnlGrid.ResumeLayout(false);

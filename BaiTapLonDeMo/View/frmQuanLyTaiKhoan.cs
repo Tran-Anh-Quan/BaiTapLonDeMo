@@ -18,7 +18,6 @@ namespace BaiTapLonDeMo.View
     {
         private TaiKhoanVM taiKhoanVM;
         private DataTable dtTaiKhoan;
-        DataTable taiKhoanTable;
         SqlDataAdapter adapter;
         SqlCommandBuilder builder;
         public frmQuanLyTaiKhoan()
@@ -26,7 +25,6 @@ namespace BaiTapLonDeMo.View
             InitializeComponent();
             LoadTaiKhoan();
             taiKhoanVM = new TaiKhoanVM();
-            dtTaiKhoan = taiKhoanVM.LayTatCatkNhanVien();
         }
 
 
@@ -39,10 +37,10 @@ namespace BaiTapLonDeMo.View
             adapter = new SqlDataAdapter(query, conn);
             builder = new SqlCommandBuilder(adapter);
 
-            taiKhoanTable = new DataTable();
-            adapter.Fill(taiKhoanTable);
+            dtTaiKhoan = new DataTable();
+            adapter.Fill(dtTaiKhoan);
 
-            dgvTaiKhoan.DataSource = taiKhoanTable;
+            dgvTaiKhoan.DataSource = dtTaiKhoan;
         }
 
         private void txtTimKiem_Leave_1(object sender, EventArgs e)
@@ -124,7 +122,7 @@ namespace BaiTapLonDeMo.View
             try
             {
                 dgvTaiKhoan.EndEdit();
-                adapter.Update(taiKhoanTable);
+                adapter.Update(dtTaiKhoan);
                 MessageBox.Show("Cập nhật thành công!");
             }
             catch (Exception ex)
@@ -132,16 +130,50 @@ namespace BaiTapLonDeMo.View
                 MessageBox.Show("Lỗi khi ghi dữ liệu: " + ex.Message);
             }
         }
+        private void dgvTaiKhoan_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Bạn có chắc muốn xóa dòng này?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (result == DialogResult.No)
+            {
+                e.Cancel = true;
+            }
+        }
 
-        private void dgvTaiKhoan_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        private void dgvTaiKhoan_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
         {
             try
             {
-                adapter.Update(taiKhoanTable);
+                adapter.Update(dtTaiKhoan);
+                MessageBox.Show("Xóa và cập nhật thành công!");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi ghi dữ liệu: " + ex.Message);
+                MessageBox.Show("Lỗi khi cập nhật sau khi xóa: " + ex.Message);
+            }
+        }
+
+        private void frmQuanLyTaiKhoan_Load(object sender, EventArgs e)
+        {
+            dgvTaiKhoan.UserDeletedRow += dgvTaiKhoan_UserDeletedRow;
+            dgvTaiKhoan.RowValidated += dgvTaiKhoan_RowValidated;
+
+
+        }
+
+        private void dgvTaiKhoan_RowValidated(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                dgvTaiKhoan.EndEdit();
+                int rowsUpdated = adapter.Update(dtTaiKhoan);
+                if (rowsUpdated > 0)
+                {
+                    stsThongBaoNhanVien.Text = $"✅ Đã cập nhật thành công {rowsUpdated} dòng.";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("❌ Lỗi ghi dữ liệu: " + ex.Message);
             }
         }
     }
